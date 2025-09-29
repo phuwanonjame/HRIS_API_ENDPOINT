@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: HRiS API (SAMART) X HumanOS
+  title: HRiS API X HumanOS
   version: 1.0.0
   description: |
     Request:

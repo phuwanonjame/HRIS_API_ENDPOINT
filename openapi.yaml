@@ -1,0 +1,302 @@
+openapi: 3.0.3
+info:
+  title: HRiS API (SAMART) X HumanOS
+  version: 1.0.0
+  description: |
+    Request:
+      ให้ IT-CAT สร้าง API Endpoint สำหรับดึงข้อมูลพนักงานทั้งหมด
+
+    Response:
+      ข้อมูลพนักงานทั้งหมด พร้อมฟิลด์ `status_record` (new / updated) ตาม snapshot ของวันนั้น
+
+    โครงสร้าง Response:
+      ประมาณตามที่กำหนดในเอกสารนี้
+
+paths:
+  /empSnapX:
+    get:
+      summary: ดึงข้อมูลพนักงานทั้งหมดพร้อมสถานะตาม snapshot ของวันที่กำหนด
+      description: |
+        คืนค่าข้อมูลพนักงานทั้งหมดใน snapshot ณ วันนั้น
+        รวมทุกกรณี (new, updated)
+        พร้อมครบทุก field ตาม schema ของตาราง employees.
+        โดยข้อมูลทั้งหมดจะอยู่ภายใน `employees` array
+      tags:
+        - Employees
+      parameters:
+        - in: query
+          name: date
+          required: false
+          schema:
+            type: string
+            format: date
+          description: คืน snapshot ณ วันที่นี้ (YYYY-MM-DD)
+      responses:
+        '200':
+          description: รายการพนักงานพร้อม status_record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeListResponse'
+              examples:
+                employee_new_example:
+                  summary: ตัวอย่างพนักงาน status_record = new
+                  value:
+                    status: success
+                    date: "2025-09-27"
+                    employees:
+                      - CODEMPID: '00026903'
+                        title_nameTH: นาย
+                        fnameTH: ภูวนนท์
+                        lnameTH: แก้วแดง
+                        title_nameEN: MS.
+                        fnameEN: 12dasd
+                        lnameEN: 12dasd
+                        nickname: เจมส์
+                        ID_position: H379
+                        GRADE: '3'
+                        PL: P5
+                        WF_Code: C960
+                        ID_org: '100000208000000000000'
+                        CODCOMP1: 100
+                        WP_CODE: A004
+                        Hiredate: 2024-08-16T00:00:00.000Z
+                        E_Mail: phuwanon.k@samartcorp.com
+                        Office_Tel: 6173
+                        Exp_date: null
+                        Exp_re: null
+                        Exp_re_detail: null
+                        Contact_Tel: 1648128
+                        ID_card_number: '1123xx1924xxx'
+                        BirthDate: 1998-08-12T00:00:00.000Z
+                        Blood: A
+                        Gender: ชาย
+                        Religion: พุทธ
+                        M_status: S
+                        FormalAddress: 380/473 ถ.รัตนาธิเบศร์ ต.บางกระสอ อ.เมืองนนทบุรี จ.นนทบุรี
+                        CurrentAddress: 380/473 ถ.รัตนาธิเบศร์ ต.บางกระสอ อ.เมืองนนทบุรี จ.นนทบุรี
+                        Postcode: '11000'
+                        Status_emp: 3
+                        CDIV: DE
+                        createempdate: 2025-09-26T16:35:18.000Z
+                        worklocation: '2'
+                        location_name: SWP 33
+                        wfmaster:
+                          MGR1_ID: '000026903'
+                          MGR2_ID: null
+                          MGR3_ID: null
+                          MGR4_ID: '000026903'
+                          MGR5_ID: '000026903'
+                          CC1_ID: null
+                          CC2_ID: null
+                          VT_ID: null
+                          STATUS: null
+                        status_record: new
+                employee_updated_example:
+                  summary: ตัวอย่างพนักงาน status_record = updated
+                  value:
+                    status: success
+                    date: "2025-09-27"
+                    employees:
+                      - CODEMPID: '00026904'
+                        title_nameTH: นางสาว
+                        fnameTH: สมหญิง
+                        lnameTH: ดีมาก
+                        title_nameEN: Ms.
+                        fnameEN: Somying
+                        lnameEN: Deemak
+                        nickname: หญิง
+                        ID_position: H380
+                        GRADE: '4'
+                        PL: P6
+                        WF_Code: C961
+                        ID_org: '100000208000000000001'
+                        CODCOMP1: 100
+                        WP_CODE: A005
+                        Hiredate: 2023-05-01T00:00:00.000Z
+                        E_Mail: somying.d@samartcorp.com
+                        Office_Tel: 6180
+                        Exp_date: null
+                        Exp_re: null
+                        Exp_re_detail: null
+                        Contact_Tel: 1648129
+                        ID_card_number: '1123xx1925xxx'
+                        BirthDate: 1992-08-15T00:00:00.000Z
+                        Blood: B
+                        Gender: หญิง
+                        Religion: พุทธ
+                        M_status: S
+                        FormalAddress: 100/1 ถนนสุขุมวิท
+                        CurrentAddress: 23/5 ถนนรามอินทรา
+                        Postcode: '10230'
+                        Status_emp: 3
+                        CDIV: DE
+                        updatelast: 2025-09-27T08:00:00.000Z
+                        worklocation: '2'
+                        location_name: SWP 34
+                        wfmaster:
+                          MGR1_ID: '000026904'
+                          MGR2_ID: null
+                          MGR3_ID: null
+                          MGR4_ID: '000026904'
+                          MGR5_ID: '000026904'
+                          CC1_ID: null
+                          CC2_ID: null
+                          VT_ID: null
+                          STATUS: null
+                        status_record: updated
+
+        '400':
+          description: Bad Request (เกิดจากการส่ง request ผิดรูปแบบ เช่น date format ผิด)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                bad_request_example:
+                  summary: Request ผิดรูปแบบ
+                  value:
+                    status: "error"
+                    message: "Invalid request. Please check the date format or required parameters."
+                    errors:
+                      - field: "date"
+                        description: "Expected format YYYY-MM-DD"
+
+        '500':
+          description: Internal Server Error (เกิดข้อผิดพลาดภายในระบบ)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                internal_error_example:
+                  summary: ข้อผิดพลาดภายในระบบ
+                  value:
+                    status: "error"
+                    message: "Internal server error. Please try again later."
+                    errors: []
+
+components:
+  schemas:
+    Employee:
+      type: object
+      description: |
+        ข้อมูลพนักงานแต่ละคน  
+        | Field | Type | Nullable | Description |
+        |-------|------|----------|-------------|
+        | CODEMPID | string | no | รหัสพนักงานประจำตัว |
+        | title_nameTH | string | no | คำนำหน้าชื่อภาษาไทย |
+        | fnameTH | string | no | ชื่อจริงภาษาไทย |
+        | lnameTH | string | no | นามสกุลภาษาไทย |
+        | title_nameEN | string | no | คำนำหน้าชื่อภาษาอังกฤษ |
+        | fnameEN | string | no | ชื่อจริงภาษาอังกฤษ |
+        | lnameEN | string | no | นามสกุลภาษาอังกฤษ |
+        | nickname | string | yes | ชื่อเล่น |
+        | ID_position | string | no | รหัสตำแหน่งงาน |
+        | GRADE | string | no | ระดับพนักงาน |
+        | PL | string | no | รหัส PL |
+        | WF_Code | string | no | รหัส WF |
+        | ID_org | string | no | รหัสองค์กร |
+        | CODCOMP1 | integer | no | รหัสบริษัท |
+        | WP_CODE | string | no | รหัส WP |
+        | Hiredate | string (date) | no | วันที่เริ่มงาน |
+        | E_Mail | string | no | อีเมล |
+        | Office_Tel | string | yes | เบอร์สำนักงาน |
+        | Exp_date | string (date) | yes | วันหมดสัญญา |
+        | Exp_re | string (date) | yes | วันต่อสัญญา |
+        | Exp_re_detail | string | yes | รายละเอียดการต่อสัญญา |
+        | Contact_Tel | string | yes | เบอร์มือถือ |
+        | ID_card_number | string | no | หมายเลขบัตรประชาชน |
+        | BirthDate | string (date) | no | วันเกิด |
+        | Blood | string | yes | กรุ๊ปเลือด |
+        | Gender | string | yes | เพศ |
+        | Religion | string | yes | ศาสนา |
+        | M_status | string | yes | สถานะสมรส |
+        | FormalAddress | string | yes | ที่อยู่ตามทะเบียนบ้าน |
+        | CurrentAddress | string | yes | ที่อยู่ปัจจุบัน |
+        | Postcode | string | yes | รหัสไปรษณีย์ |
+        | Status_emp | integer | no | สถานะพนักงาน |
+        | CDIV | string | yes | แผนก/Division |
+        | createempdate | string (datetime) | yes | วันที่สร้าง record (สำหรับ new) |
+        | updatelast | string (datetime) | yes | วันที่แก้ไขล่าสุด (สำหรับ updated) |
+        | worklocation | string | yes | รหัสสถานที่ทำงาน |
+        | location_name | string | yes | ชื่อสถานที่ทำงาน |
+        | wfmaster | object | yes | ข้อมูลหัวหน้างานและ workflow |
+        | status_record | string | no | สถานะ record (new / updated / unchanged / deleted) |
+      properties:
+        CODEMPID: { type: string, maxLength: 8 }
+        title_nameTH: { type: string, maxLength: 20 }
+        fnameTH: { type: string, maxLength: 100 }
+        lnameTH: { type: string, maxLength: 100 }
+        title_nameEN: { type: string, maxLength: 20 }
+        fnameEN: { type: string, maxLength: 100 }
+        lnameEN: { type: string, maxLength: 100 }
+        nickname: { type: string, maxLength: 60 }
+        ID_position: { type: string, maxLength: 10 }
+        GRADE: { type: string, maxLength: 2 }
+        PL: { type: string, maxLength: 5 }
+        WF_Code: { type: string, maxLength: 5 }
+        ID_org: { type: string, maxLength: 50 }
+        CODCOMP1: { type: integer }
+        WP_CODE: { type: string, maxLength: 10 }
+        Hiredate: { type: string, format: date }
+        E_Mail: { type: string, format: email, maxLength: 255 }
+        Office_Tel: { type: string, maxLength: 255 }
+        Exp_date: { type: string, format: date, nullable: true }
+        Exp_re: { type: string, format: date, nullable: true }
+        Exp_re_detail: { type: string, maxLength: 255, nullable: true }
+        Contact_Tel: { type: string, maxLength: 255 }
+        ID_card_number: { type: string, maxLength: 13 }
+        BirthDate: { type: string, format: date }
+        Blood: { type: string, maxLength: 5 }
+        Gender: { type: string, maxLength: 5 }
+        Religion: { type: string, maxLength: 10 }
+        M_status: { type: string, maxLength: 255 }
+        FormalAddress: { type: string, maxLength: 255 }
+        CurrentAddress: { type: string, maxLength: 255 }
+        Postcode: { type: string, maxLength: 255 }
+        Status_emp: { type: integer }
+        CDIV: { type: string, maxLength: 255 }
+        createempdate: { type: string, format: date-time, nullable: true }
+        updatelast: { type: string, format: date-time, nullable: true }
+        worklocation: { type: string, maxLength: 255 }
+        location_name: { type: string, maxLength: 255 }
+        wfmaster:
+          type: object
+          properties:
+            MGR1_ID: { type: string, maxLength: 8, nullable: true }
+            MGR2_ID: { type: string, maxLength: 8, nullable: true }
+            MGR3_ID: { type: string, maxLength: 8, nullable: true }
+            MGR4_ID: { type: string, maxLength: 8, nullable: true }
+            MGR5_ID: { type: string, maxLength: 8, nullable: true }
+            CC1_ID: { type: string, maxLength: 8, nullable: true }
+            CC2_ID: { type: string, maxLength: 8, nullable: true }
+            VT_ID: { type: string, maxLength: 8, nullable: true }
+            STATUS: { type: string, maxLength: 3, nullable: true }
+
+    EmployeeListResponse:
+      type: object
+      description: |
+        Response ของพนักงานทั้งหมดในวันนั้น โดยข้อมูลทั้งหมดจะอยู่ใน `employees` array
+      properties:
+        status: { type: string }
+        date: { type: string, format: date }
+        employees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+
+    ErrorResponse:
+      type: object
+      description: |
+        Response กรณีเกิดข้อผิดพลาด
+      properties:
+        status: { type: string, example: error }
+        message: { type: string, example: "Invalid request or internal error" }
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string }
+              description: { type: string }

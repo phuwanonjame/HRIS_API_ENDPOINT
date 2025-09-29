@@ -222,7 +222,7 @@ components:
         | worklocation | string | yes | รหัสสถานที่ทำงาน |
         | location_name | string | yes | ชื่อสถานที่ทำงาน |
         | wfmaster | object | yes | ข้อมูลหัวหน้างานและ workflow |
-        | status_record | string | no | สถานะ record (new / updated / unchanged / deleted) |
+        | status_record | string | no | สถานะ record (new / updated) |
       properties:
         CODEMPID: { type: string, maxLength: 8 }
         title_nameTH: { type: string, maxLength: 20 }
